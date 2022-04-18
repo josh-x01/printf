@@ -1,82 +1,43 @@
 #include "main.h"
+#include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
-
 /**
- * check_for_specifiers - checks if there is a valid format specifier
- * @format: possible format specifier
- *
- * Return: pointer to valid function or NULL
- */
-static int (*check_for_specifiers(const char *format))(va_list)
-{
-	unsigned int i;
-	print_t p[] = {
-		{"c", print_c},
-		{"s", print_s},
-		{"i", print_i},
-		{"d", print_d},
-		{"u", print_u},
-		{"b", print_b},
-		{"o", print_o},
-		{"x", print_x},
-		{"X", print_X},
-		{"p", print_p},
-		{"S", print_S},
-		{"r", print_r},
-		{"R", print_R},
-		{NULL, NULL}
-	};
-
-	for (i = 0; p[i].t != NULL; i++)
-	{
-		if (*(p[i].t) == *format)
-		{
-			break;
-		}
-	}
-	return (p[i].f);
-}
-
-/**
- * _printf - prints anything
- * @format: list of argument types passed to the function
- *
+ * _printf - printf with variable argument list
+ * @format: The first argument
  * Return: number of characters printed
  */
-int _printf(const char *format, ...)
+void _printf(const char *format, ...)
 {
-	unsigned int i = 0, count = 0;
-	va_list valist;
-	int (*f)(va_list);
+	va_list ap;
+	char *P;
+	char c;
+	char *s;
+	int i, j;
 
-	if (format == NULL)
-		return (-1);
-	va_start(valist, format);
-	while (format[i])
+	va_start(ap, format);
+	p = format;
+	for (i = 0; P[i] != '\0'; i++)
 	{
-		for (; format[i] != '%' && format[i]; i++)
+		while (P[i] != '%')
 		{
-			_putchar(format[i]);
-			count++;
-		}
-		if (!format[i])
-			return (count);
-		f = check_for_specifiers(&format[i + 1]);
-		if (f != NULL)
-		{
-			count += f(valist);
-			i += 2;
-			continue;
-		}
-		if (!format[i + 1])
-			return (-1);
-		_putchar(format[i]);
-		count++;
-		if (format[i + 1] == '%')
-			i += 2;
-		else
+		:	_putchar(p[i]);
 			i++;
+		}
+		i++;
+
+		switch (p[i])
+		{
+			case 'c':
+				c = va_arg(ap, char);
+				_putchar(c);
+				break;
+			case 's':
+				s = va_arg(ap, char*)
+				for (j = 0; s[j] != '\0'; j++)
+					_putchar(s[j]);
+				break;
+		}
 	}
-	va_end(valist);
-	return (count);
+	va_end(ap);
 }
