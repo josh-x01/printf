@@ -4,34 +4,36 @@
 #include <stdlib.h>
 /**
  * _printf - printf with variable argument list
- * @char *format: The first argument
- * Return: number of characters printed 
+ * @format: The first argument
+ * Return: number of characters printed
  */
-void _printf(char *format, ... ) 
-{ 
+void _printf(const char *format, ...)
+{
 	va_list ap;
-	char *P, c, *s;
+	char *P;
+	char c;
+	char *s;
 	int i, j;
 
 	va_start(ap, format);
 	p = format;
-	for ( i = 0; P[i] != '\0'; i++)
-	{ 
-		while ( P[i] != '%') 
+	for (i = 0; P[i] != '\0'; i++)
+	{
+		while (P[i] != '%')
 		{
-			_putchar(p[i]);
+		:	_putchar(p[i]);
 			i++;
-		} 
+		}
 		i++;
 
-		switch(p[i])
+		switch (p[i])
 		{
-			case 'c' :
-				c = va_arg(ap,char);
+			case 'c':
+				c = va_arg(ap, char);
 				_putchar(c);
 				break;
-			case 's' :
-				s = va_arg(ap,char*): 
+			case 's':
+				s = va_arg(ap, char*)
 				for (j = 0; s[j] != '\0'; j++)
 					_putchar(s[j]);
 				break;
