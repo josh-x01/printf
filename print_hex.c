@@ -1,130 +1,116 @@
 #include "main.h"
+#include <stdlib.h>
 
 /**
- * print_hex - prints an unsigned int in hexidecimal form
- * @n: unsigned int to print
- * @c: flag to determine case of printing (0 = lower, 1 = upper)
+ * print_c - prints a char
+ * @c: char to print
  *
- * Return: number of digits printed
+ * Return: always 1
  */
-int print_hex(unsigned int n, unsigned int c)
+int print_c(va_list c)
 {
-	unsigned int a[8];
-	unsigned int i, m, sum;
-	char diff;
-	int count;
+	char ch = (char)va_arg(c, int);
 
-	m = 268435456; /* (16 ^ 7) */
-	if (c)
-		diff = 'A' - ':';
-	else
-		diff = 'a' - ':';
-	a[0] = n / m;
-	for (i = 1; i < 8; i++)
+	_putchar(ch);
+	return (1);
+}
+
+/**
+ * print_s - prints a string
+ * @s: string to print
+ *
+ * Return: number of chars printed
+ */
+int print_s(va_list s)
+{
+	int count;
+	char *str = va_arg(s, char *);
+
+	if (str == NULL)
+		str = "(null)";
+	for (count = 0; str[count]; count++)
 	{
-		m /= 16;
-		a[i] = (n / m) % 16;
+		_putchar(str[count]);
 	}
-	for (i = 0, sum = 0, count = 0; i < 8; i++)
+	return (count);
+}
+
+/**
+ * hex_print - prints a char's ascii value in uppercase hex
+ * @c: char to print
+ *
+ * Return: number of chars printed (always 2)
+ */
+static int hex_print(char c)
+{
+	int count;
+	char diff = 'A' - ':';
+	char d[2];
+
+	d[0] = c / 16;
+	d[1] = c % 16;
+	for (count = 0; count < 2; count++)
 	{
-		sum += a[i];
-		if (sum || i == 7)
+		if (d[count] >= 10)
+			_putchar('0' + diff + d[count]);
+		else
+			_putchar('0' + d[count]);
+	}
+	return (count);
+}
+
+/**
+ * print_S - prints a string and nonprintable character ascii values
+ * @S: string to print
+ *
+ * Return: number of chars printed
+ */
+int print_S(va_list S)
+{
+	unsigned int i;
+	int count = 0;
+	char *str = va_arg(S, char *);
+
+	if (str == NULL)
+		str = "(null)";
+	for (i = 0; str[i]; i++)
+	{
+		if (str[i] < 32 || str[i] >= 127)
 		{
-			if (a[i] < 10)
-				_putchar('0' + a[i]);
-			else
-				_putchar('0' + diff + a[i]);
+			_putchar('\\');
+			_putchar('x');
+			count += 2;
+			count += hex_print(str[i]);
+		}
+		else
+		{
+			_putchar(str[i]);
 			count++;
 		}
 	}
 	return (count);
 }
-/**
- * print_x - takes an unsigned int and prints it in lowercase hex notation
- * @x: unsigned int to print
- *
- * Return: number of digits printed
- */
-int print_x(va_list x)
-{
-	return (print_hex(va_arg(x, unsigned int), 0));
-}
 
 /**
- * print_X - takes am unsigned int and prints it in uppercase hex notation
- * @X: unsigned int to print
+ * print_r - prints astring in reverse
+ * @r: string to print
  *
- * Return: number of digits printed
+ * Return: number of chars printed
  */
-int print_X(va_list X)
+int print_r(va_list r)
 {
-	return (print_hex(va_arg(X, unsigned int), 1));
-}
+	char *str;
+	int i, count = 0;
 
-/**
- * _pow - calculates an exponent
- * @base: base of exponent
- * @exponent: exponent of number
- *
- * Return: base ^ exponent
- */
-static unsigned long _pow(unsigned int base, unsigned int exponent)
-{
-	unsigned int i;
-	unsigned long ans = base;
-
-	for (i = 1; i < exponent; i++)
+	str = va_arg(r, char *);
+	if (str == NULL)
+		str = ")llun(";
+	for (i = 0; str[i]; i++)
+		;
+	for (i -= 1; i >= 0; i--)
 	{
-		ans *= base;
-	}
-	return (ans);
-}
-
-/**
- * print_p - prints an address
- * @p: address to print
- *
- * Return: number of characters to print
- */
-int print_p(va_list p)
-{
-	int count = 0;
-	unsigned int a[16];
-	unsigned int i, sum;
-	unsigned long n, m;
-	char *str = "(nil)";
-
-	n = va_arg(p, unsigned long);
-	if (n == 0)
-	{
-		for (i = 0; str[i]; i++)
-		{
-			_putchar(str[i]);
-			count++;
-		}
-		return (count);
-	}
-	_putchar('0');
-	_putchar('x');
-	count = 2;
-	m = _pow(16, 15); /* 16 ^ 15 */
-	a[0] = n / m;
-	for (i = 1; i < 16; i++)
-	{
-		m /= 16;
-		a[i] = (n / m) % 16;
-	}
-	for (i = 0, sum = 0; i < 16; i++)
-	{
-		sum += a[i];
-		if (sum || i == 15)
-		{
-			if (a[i] < 10)
-				_putchar('0' + a[i]);
-			else
-				_putchar('0' + ('a' - ':') + a[i]);
-			count++;
-		}
+		_putchar(str[i]);
+		count++;
 	}
 	return (count);
 }
