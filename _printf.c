@@ -1,82 +1,45 @@
-#include "main.h"
-#include <stdlib.h>
-
+#include "holberton.h"
 /**
- * check_for_specifiers - checks for format specifier
- * @format: format specifier
- *
- * Return: pointer or NULL
+ * _printf - is a function that selects the correct function to print.
+ * @format: identifier to look for.
+ * Return: the length of the string.
  */
-static int (*check_for_specifiers(const char *format))(va_list)
+int _printf(const char * const format, ...)
 {
-	unsigned int i;
-	print_t p[] = {
-		{"c", print_c},
-		{"s", print_s},
-		{"i", print_i},
-		{"d", print_d},
-		{"u", print_u},
-		{"b", print_b},
-		{"o", print_o},
-		{"x", print_x},
-		{"X", print_X},
-		{"p", print_p},
-		{"S", print_S},
-		{"r", print_r},
-		{"R", print_R},
-		{NULL, NULL}
+	convert_match m[] = {
+		{"%s", printf_string}, {"%c", printf_char},
+		{"%%", printf_37},
+		{"%i", printf_int}, {"%d", printf_dec}, {"%r", printf_srev},
+		{"%R", printf_rot13}, {"%b", printf_bin}, {"%u", printf_unsigned},
+		{"%o", printf_oct}, {"%x", printf_hex}, {"%X", printf_HEX},
+		{"%S", printf_exclusive_string}, {"%p", printf_pointer}
 	};
 
-	for (i = 0; p[i].t != NULL; i++)
-	{
-		if (*(p[i].t) == *format)
-		{
-			break;
-		}
-	}
-	return (p[i].f);
-}
+	va_list args;
+	int i = 0, j, len = 0;
 
-/**
- * _printf - prints char and string
- * @format: list of argument
- *
- * Return: number of characters
- */
-int _printf(const char *format, ...)
-{
-	unsigned int i = 0, count = 0;
-	va_list valist;
-	int (*f)(va_list);
-
-	if (format == NULL)
+	va_start(args, format);
+	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
 		return (-1);
-	va_start(valist, format);
-	while (format[i])
+
+Here:
+	while (format[i] != '\0')
 	{
-		for (; format[i] != '%' && format[i]; i++)
+		j = 13;
+		while (j >= 0)
 		{
-			_putchar(format[i]);
-			count++;
+			if (m[j].id[0] == format[i] && m[j].id[1] == format[i + 1])
+			{
+				len += m[j].f(args);
+				i = i + 2;
+				goto Here;
+			}
+			j--;
 		}
-		if (!format[i])
-			return (count);
-		f = check_for_specifiers(&format[i + 1]);
-		if (f != NULL)
-		{
-			count += f(valist);
-			i += 2;
-			continue;
-		}
-		if (!format[i + 1])
-			return (-1);
 		_putchar(format[i]);
-		count++;
-		if (format[i + 1] == '%')
-			i += 2;
-		else
-			i++;
+		len++;
+		i++;
 	}
-	va_end(valist);
-	return (count);
+	va_end(args);
+	return (len);
 }
