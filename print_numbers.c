@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * print_i - prints an integer
+ * print_i - prints an integer.
  * @i: integer to print
  *
  * Return: number of chars and digits printed

@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * print_hex - prints an unsigned int in hexidecimal form
+ * print_hex - prints an unsigned int in hexidecimal form.
  * @n: unsigned int to print
  * @c: flag to determine case of printing (0 = lower, 1 = upper)
  *
