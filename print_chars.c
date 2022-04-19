@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /**
- * print_c - prints a char
+ * print_c - prints a char.
  * @c: char to print
  *
  * Return: always 1
